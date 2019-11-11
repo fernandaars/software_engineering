@@ -101,3 +101,11 @@ class Customer {
      return result;
 }
 
+m1 = Movie("Titanic", 10)
+m2 = Movie("MIB", 12)
+m3 = Movie("Leaving Las Vegas", 20)
+c = Customer ("Fernanda")
+c.addRental(Rental(m1, 1)
+c.addRental(Rental(m2, 12)
+c.addRental(Rental(m3, 178)
+res = c.statement()
