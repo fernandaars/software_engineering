@@ -1,28 +1,53 @@
 public class Movie {
 
-  public static final int  CHILDRENS = 2;
-  public static final int  REGULAR = 0;
-  public static final int  NEW_RELEASE = 1;
+  private Price _price;
 
-  private String _title;
-  private int _priceCode;
+   public Movie(String name, int priceCode) {
+      _title = name;
+      setPriceCode(priceCode);
+   }
+    
+   public int getPriceCode() {
+      return _price.getPriceCode();
+   }
+   
+   public void setPriceCode(int arg) {
+      switch (arg) {
+         case REGULAR:
+            _price = new RegularPrice();
+            break;
+         case CHILDRENS:
+            _price = new ChildrensPrice();
+            break;
+         case NEW_RELEASE:
+            _price = new NewReleasePrice();
+            break;
+         default:
+            throw new IllegalArgumentException("Incorrect Price Code");
+      }
+   }
+};
 
-  public Movie(String title, int priceCode) {
-      _title = title;
-      _priceCode = priceCode;
-  }
-
-  public int getPriceCode() {
-      return _priceCode;
-  }
-
-  public void setPriceCode(int arg) {
-     _priceCode = arg;
-  }
-
-  public String getTitle (){
-      return _title;
-  };
+abstract class Price {
+   abstract int getPriceCode();
+}
+ 
+class ChildrensPrice extends Price {
+   int getPriceCode() {
+       return Movie.CHILDRENS;
+   }
+}
+ 
+class NewReleasePrice extends Price {
+   int getPriceCode() {
+       return Movie.NEW_RELEASE;
+   }
+}
+ 
+class RegularPrice extends Price {
+   int getPriceCode() {
+       return Movie.REGULAR;
+   }
 }
 
 class Rental {
@@ -40,29 +65,12 @@ class Rental {
       return _movie;
     }
 
-    double getCharge() { // veja que não precisa mais de parâmetro
-     double result = 0;
-     switch (getMovie().getPriceCode()) {
-        case Movie.REGULAR:
-           result += 2;
-           if (getDaysRented() > 2)
-              result += (getDaysRented() - 2) * 1.5;
-           break;
-        case Movie.NEW_RELEASE:
-           result += getDaysRented() * 3;
-           break;
-        case Movie.CHILDRENS:
-           result += 1.5;
-           if (getDaysRented() > 3)
-              result += (getDaysRented() - 3) * 1.5;
-           break;
-     }
+     double getCharge() {
+      return _movie.getCharge(_daysRented);
+      }
 
-     int getFrequentRenterPoints() {
-       if ((getMovie().getPriceCode() == Movie.NEW_RELEASE) && getDaysRented() > 1)
-          return 2;
-       else
-          return 1;
+      int getFrequentRenterPoints() {
+       return _movie.getFrequentRenterPoints(_daysRented);
    }
 }
 
